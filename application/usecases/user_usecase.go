@@ -17,7 +17,7 @@ func (u *UserUseCase) CreateUser(user *models.User) error {
 	return u.repo.Create(user)
 }
 
-func (u *UserUseCase) GetUserById(id uint) (*models.User, error) {
+func (u *UserUseCase) GetUserById(id string) (*models.User, error) {
 	return u.repo.FindById(id)
 }
 

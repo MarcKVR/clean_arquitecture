@@ -18,9 +18,9 @@ func (r *UserRepositoryGorm) Create(user *models.User) error {
 	return r.gorm.Create(user).Error
 }
 
-func (r *UserRepositoryGorm) FindById(id uint) (*models.User, error) {
+func (r *UserRepositoryGorm) FindById(id string) (*models.User, error) {
 	var user models.User
-	resul := r.gorm.First(&user, id)
+	resul := r.gorm.Where("id = ?", id).First(&user)
 
 	return &user, resul.Error
 }
