@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/MarcKVR/clean_arquitecture/cmd/config"
+	"github.com/MarcKVR/clean_arquitecture/domain/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -21,6 +22,10 @@ func InitDB(cfg *config.Config) (*gorm.DB, error) {
 	db_connection, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	if err != nil {
+		return nil, err
+	}
+
+	if err := db_connection.AutoMigrate(&models.User{}); err != nil {
 		return nil, err
 	}
 

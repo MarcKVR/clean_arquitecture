@@ -39,11 +39,17 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config) {
 	usecase := usecases.NewExchangeRateUsecase(repo)
 	handlers.NewExchangeRateHandler(app, usecase)
 
-	// fileHandler := handlers.NewFileHandler(service.NewFileService(s3.NewS3SClient(cfg)))
-	// app.Post("/upload", fileHandler.UploadFile)
-
 	s3Repo := s3.NewS3SClient(cfg)
 	s3Service := service.NewFileService(s3Repo)
 	s3Handler := handlers.NewFileHandler(s3Service)
 	app.Post("/upload", s3Handler.UploadFile)
+
+	userRepo := repository.NewUserRepository(db)
+	userUsecase := usecases.NewUserUseCase(userRepo)
+	userHandler := handlers.NewUserHandler(userUsecase)
+	app.Post("/users", userHandler.CreateUser)
+	app.Get("/users/:id", userHandler.GetUserById)
+	app.Get("/users", userHandler.GetAllUsers)
+	app.Put("/users", userHandler.UpdateUser)
+	app.Delete("/users/:id", userHandler.DeleteUser)
 }
